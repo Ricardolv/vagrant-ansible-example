@@ -89,10 +89,26 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "memcached" do |memcached|
     memcached.vm.box = "centos/7"
+    memcached.vm.synced_folder ".", "/vagrant", disabled: true
     memcached.vm.provider "virtualbox" do |vb|
         vb.memory = 512
         vb.cpus = 1
         vb.name = "centos7_memcached"
     end
   end
+
+  config.vm.define "dockerhost" do |dockerhost|
+    
+    dockerhost.vm.synced_folder ".", "/vagrant", disabled: true
+    
+    dockerhost.vm.provider "virtualbox" do |vb|
+        vb.memory = 512
+        vb.cpus = 1
+        vb.name = "ubuntu_dockerhost"
+    end
+
+    dockerhost.vm.provision "shell",  inline: "apt-get update && apt-get install -y docker.io"
+  end
+
+
 end
